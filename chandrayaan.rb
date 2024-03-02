@@ -8,7 +8,7 @@ class Chandrayaan
     commands.each do |command|
       if %w[f b].include?(command)
         curr_position = move_spacecraft(curr_position, command, curr_facing_direction)
-      elsif %w[l r].include?(command)
+      elsif %w[l r u d].include?(command)
         curr_facing_direction = change_facing_direction(curr_facing_direction, command)
       end
     end
@@ -22,12 +22,17 @@ class Chandrayaan
       new_facing_direction_index = (curr_facing_direction_index - 1) % 4
     elsif command == 'r'
       new_facing_direction_index = (curr_facing_direction_index + 1) % 4
+    elsif command == 'u'
+      return 'U'
+    elsif command == 'd'
+      return 'D'
     end
     directions[new_facing_direction_index]
   end
 
   def move_spacecraft(position, command, curr_facing_direction)
-    # Move the first index if curr_facing_direction if east or west, else move the second index
+    # Move the first index if curr_facing_direction if east or west,
+    # Move the second index if curr_facing_direction if north or south
     if %w[E W].include?(curr_facing_direction)
       if command == 'f'
         position[0] += 1
