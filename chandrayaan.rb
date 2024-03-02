@@ -31,8 +31,9 @@ class Chandrayaan
   end
 
   def move_spacecraft(position, command, curr_facing_direction)
-    # Move the first index if curr_facing_direction if east or west,
-    # Move the second index if curr_facing_direction if north or south
+    # Move the first index if curr_facing_direction is east or west,
+    # Move the second index if curr_facing_direction is north or south
+    # Move the third index if curr_facing_direction is up or down
     if %w[E W].include?(curr_facing_direction)
       if command == 'f'
         position[0] += 1
@@ -44,6 +45,12 @@ class Chandrayaan
         position[1] += 1
       elsif command == 'b'
         position[1] -= 1
+      end
+    elsif %w[U D].include?(curr_facing_direction)
+      if command == 'f'
+        position[2] += 1
+      elsif command == 'b'
+        position[2] -= 1
       end
     end
     position

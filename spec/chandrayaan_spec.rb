@@ -68,5 +68,15 @@ describe Chandrayaan do
       spacecraft = Chandrayaan.new
       expect(spacecraft.navigate(%w[d])).to eq([[0, 0, 0], 'D'])
     end
+
+    it 'Change angle of spacecraft and move it ' do
+      spacecraft = Chandrayaan.new
+      expect(spacecraft.navigate(%w[d f])).to eq([[0, 0, 1], 'D'])
+    end
+
+    it 'Change angle of spacecraft and move it multiple times ' do
+      spacecraft = Chandrayaan.new
+      expect(spacecraft.navigate(%w[d f f b u b])).to eq([[0, 0, 0], 'U'])
+    end
   end
 end
