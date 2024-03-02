@@ -2,7 +2,9 @@
 
 require_relative '../chandrayaan'
 
+# Test suite for chandrayaan spacecraft
 describe Chandrayaan do
+  # Test suite for navigate functionality of spacecraft
   describe '#navigate' do
     it 'Move spacecraft forward' do
       spacecraft = Chandrayaan.new
