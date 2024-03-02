@@ -2,57 +2,81 @@
 
 # Chandrayaan class for controlling the spacecraft
 class Chandrayaan
+  DIRECTIONS = %w[N E S W].freeze
+  COMMANDS = {
+    'f' => :forward,
+    'b' => :backward,
+    'l' => :left,
+    'r' => :right,
+    'u' => :up,
+    'd' => :down
+  }.freeze
+
+  def initialize
+    @curr_position = [0, 0, 0]
+    @curr_facing_direction = 'N'
+    # Current facing angle represents if the spacecraft is facing towards upwards or downwards angle
+    @curr_facing_angle = nil
+  end
+
   # For navigating the spacecraft through galaxy
   def navigate(commands)
-    curr_facing_direction = 'N'
-    # Current facing angle represents if the spacecraft is facing towards upwards or downwards angle
-    curr_facing_angle = nil
-    curr_position = [0, 0, 0]
+    @curr_position = [0, 0, 0]
     commands.each do |command|
-      # In case of forward or backward command
-      if %w[f b].include?(command)
-        move_spacecraft(curr_position, command, curr_facing_direction, curr_facing_angle)
-      # In case of left or right command to change direction
-      elsif %w[l r].include?(command)
-        curr_facing_direction = change_facing_direction(curr_facing_direction, command)
-        # Marking curr_facing_angle as nil so that we know spacecraft has not changed angles
-        curr_facing_angle = nil
-      # In case of upward or downward command to change angles
-      elsif %w[u d].include?(command)
-        curr_facing_angle = change_facing_angle(command)
-      end
+      handle_command(command)
     end
     # Return curr_facing_angle if it is present else return curr_facing_direction
-    [curr_position, curr_facing_angle || curr_facing_direction]
+    [@curr_position, @curr_facing_angle || @curr_facing_direction]
   end
 
-  def change_facing_direction(curr_facing_direction, command)
+  private
+
+  def handle_command(command)
+    send(COMMANDS[command])
+  end
+
+  def forward
+    move_spacecraft(1)
+  end
+
+  def backward
+    move_spacecraft(-1)
+  end
+
+  def left
+    change_facing_direction(-1)
+  end
+
+  def right
+    change_facing_direction(1)
+  end
+
+  def up
+    @curr_facing_angle = 'U'
+  end
+
+  def down
+    @curr_facing_angle = 'D'
+  end
+
+  def change_facing_direction(direction_change)
     # Changing direction based on its index and rotating the index if it goes out of bounds
-    directions = %w[N E S W]
-    direction_change = command == 'l' ? -1 : 1
-    curr_facing_direction_index = directions.index(curr_facing_direction)
+    curr_facing_direction_index = DIRECTIONS.index(@curr_facing_direction)
     new_facing_direction_index = (curr_facing_direction_index + direction_change) % 4
-    directions[new_facing_direction_index]
+    # Marking curr_facing_angle as nil so that we know spacecraft has not changed angles
+    @curr_facing_angle = nil
+    @curr_facing_direction = DIRECTIONS[new_facing_direction_index]
   end
 
-  def change_facing_angle(command)
-    # Give the command only as we have only 2 angles, Up and Down
-    command.upcase
-  end
-
-  def move_spacecraft(position, command, curr_facing_direction, curr_facing_angle)
+  def move_spacecraft(movement_change)
     # Move the first index if curr_facing_direction is east or west,
     # Move the second index if curr_facing_direction is north or south
     # Move the third index if curr_facing_angle is present(The spacecraft if facing either upward or downward angle)
-    movement_change = command == 'f' ? 1 : -1
-    if curr_facing_angle.nil?
-      if %w[E W].include?(curr_facing_direction)
-        position[0] += movement_change
-      elsif %w[N S].include?(curr_facing_direction)
-        position[1] += movement_change
-      end
+    if @curr_facing_angle
+      @curr_position[2] += movement_change
     else
-      position[2] += movement_change
+      axis = %w[E W].include?(@curr_facing_direction) ? 0 : 1
+      @curr_position[axis] += movement_change
     end
   end
 end
