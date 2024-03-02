@@ -8,6 +8,8 @@ class Chandrayaan
     for command in commands
       if command == 'f'
         curr_position[1] += 1
+      elsif command == 'b'
+        curr_position[1] -= 1
       end
     end
     curr_position
