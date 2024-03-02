@@ -33,5 +33,10 @@ describe Chandrayaan do
       spacecraft = Chandrayaan.new
       expect(spacecraft.navigate(%w[r])).to eq([[0, 0, 0], 'E'])
     end
+
+    it 'Change Directions of spacecraft multiple times to the left and right' do
+      spacecraft = Chandrayaan.new
+      expect(spacecraft.navigate(%w[r l r l l l l r])).to eq([[0, 0, 0], 'S'])
+    end
   end
 end

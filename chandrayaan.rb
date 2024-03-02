@@ -10,12 +10,21 @@ class Chandrayaan
         curr_position[1] += 1
       elsif command == 'b'
         curr_position[1] -= 1
-      elsif command == 'l'
-        curr_facing_direction = 'W'
-      elsif command == 'r'
-        curr_facing_direction = 'E'
+      elsif %w[l r].include?(command)
+        curr_facing_direction = change_facing_direction(curr_facing_direction, command)
       end
     end
     [curr_position, curr_facing_direction]
+  end
+
+  def change_facing_direction(curr_facing_direction, command)
+    directions = %w[N E S W]
+    curr_facing_direction_index = directions.index(curr_facing_direction)
+    if command == 'l'
+      new_facing_direction_index = (curr_facing_direction_index - 1) % 4
+    elsif command == 'r'
+      new_facing_direction_index = (curr_facing_direction_index + 1) % 4
+    end
+    directions[new_facing_direction_index]
   end
 end
