@@ -56,7 +56,7 @@ class Chandrayaan
   end
 
   def down
-    @curr_facing_angle = 'A'
+    @curr_facing_angle = 'D'
   end
 
   def change_facing_direction(direction_change)
